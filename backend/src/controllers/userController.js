@@ -83,6 +83,7 @@ exports.loginUser = async (req, res) => {
                 httpOnly: true,
                 sameSite: "none",
                 secure: true,
+                partitioned: true,
             };
 
             // Set cookie with token

@@ -1,3 +1,15 @@
+/**
+ * PROJECT: S-E-Commerce-Live
+ * AUTHOR: [Md. Sabur]
+ * LICENSE: GPL-3.0 (Educational Use Only)
+ * * NOTE TO STUDENTS: Feel free to use this logic to learn.
+ * NOTE TO SELLERS: Commercial resale is a violation of the license.
+ */
+
+//================================================
+// If you find this helpful, please give it a ⭐ on GitHub!
+//================================================
+
 const express = require("express");
 const userController = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");

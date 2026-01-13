@@ -1,3 +1,15 @@
+/**
+ * PROJECT: S-E-Commerce-Live
+ * AUTHOR: [Md. Sabur]
+ * LICENSE: GPL-3.0 (Educational Use Only)
+ * * NOTE TO STUDENTS: Feel free to use this logic to learn.
+ * NOTE TO SELLERS: Commercial resale is a violation of the license.
+ */
+
+//================================================
+// If you find this helpful, please give it a ⭐ on GitHub!
+//================================================
+
 // detEnv configuration
 const dotEnv = require("dotenv");
 dotEnv.config();
@@ -41,18 +53,25 @@ app.use(
 
 // Database connection
 const url = process.env.DB_URL;
+mongoose.set('bufferCommands', false);
 
-let options = {
-    user: process.env.DB_USER,
-    pass: process.env.DB_PASSWORD,
-    autoIndex: true,
-    serverSelectionTimeoutMS: 50000,
+const connectDB = async () => {
+    if (mongoose.connection.readyState >= 1) return;
+
+    try {
+        await mongoose.connect(process.env.DB_URL, {
+            user: process.env.DB_USER,
+            pass: process.env.DB_PASSWORD,
+            autoIndex: true,
+            serverSelectionTimeoutMS: 5000,
+        });
+        console.log("Database connected successfully");
+    } catch (err) {
+        console.error("Database connection error:", err);
+    }
 };
 
-mongoose
-    .connect(url, options)
-    .then(() => console.log("Database connected successfully"))
-    .catch((err) => console.error("Database connection error:", err));
+connectDB();
 
 // Routes
 app.get("/", (req, res) => {
