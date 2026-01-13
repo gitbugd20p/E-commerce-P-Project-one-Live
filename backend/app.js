@@ -53,7 +53,7 @@ app.use(
 
 // Database connection
 const url = process.env.DB_URL;
-mongoose.set('bufferCommands', false);
+mongoose.set("bufferCommands", true);
 
 const connectDB = async () => {
     if (mongoose.connection.readyState >= 1) return;
@@ -63,7 +63,7 @@ const connectDB = async () => {
             user: process.env.DB_USER,
             pass: process.env.DB_PASSWORD,
             autoIndex: true,
-            serverSelectionTimeoutMS: 5000,
+            serverSelectionTimeoutMS: 10000,
         });
         console.log("Database connected successfully");
     } catch (err) {
@@ -71,7 +71,14 @@ const connectDB = async () => {
     }
 };
 
-connectDB();
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (err) {
+        res.status(500).json({ error: "Database connection failed" });
+    }
+});
 
 // Routes
 app.get("/", (req, res) => {
