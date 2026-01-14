@@ -12,10 +12,8 @@ const CategoryProducts = () => {
     useCategoryStore();
 
   useEffect(() => {
-    if (categoryProducts.length === 0) {
-      fetchProductByCategory(categoryName);
-    }
-  }, [categoryName, fetchProductByCategory, categoryProducts.length]);
+    fetchProductByCategory(categoryName);
+  }, [categoryName, fetchProductByCategory]);
 
   if (loading) return <Loader />;
 
