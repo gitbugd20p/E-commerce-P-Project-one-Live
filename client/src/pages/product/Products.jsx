@@ -9,9 +9,7 @@ const Products = () => {
     useProductStore();
 
   useEffect(() => {
-    if (products.length === 0) {
-      fetchProducts(false);
-    }
+    fetchProducts(false);
   }, []);
 
   return (

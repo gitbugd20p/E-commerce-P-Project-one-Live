@@ -40,7 +40,7 @@ const useProductStore = create((set, get) => ({
   },
 
   fetchProducts: async (isLoadMore = false) => {
-    if (get().loading) return
+    if (get().loading) return;
     set({ loading: true });
     try {
       const { filters, page, products } = useProductStore.getState();
@@ -54,7 +54,14 @@ const useProductStore = create((set, get) => ({
       });
 
       set({
-        products: isLoadMore ? [...products, ...res.data.data] : res.data.data,
+        products: isLoadMore
+          ? [
+              ...products,
+              ...res.data.data.filter(
+                (newItem) => !products.some((prod) => prod._id === newItem._id),
+              ),
+            ]
+          : res.data.data,
         hasMore: res.data.hasMore,
         page: currentPage + 1,
         loading: false,

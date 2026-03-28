@@ -90,7 +90,7 @@ exports.getAllProducts = async (req, res) => {
         const skip = (Number(page) - 1) * Number(limit);
 
         const products = await Product.find(query)
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: -1, title: 1 })
             .skip(skip)
             .limit(Number(limit));
 
