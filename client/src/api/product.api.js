@@ -1,6 +1,7 @@
 import api from "./axios";
 
-export const getProductsApi = (params = {}) => api.get("/products", { params });
+export const getProductsApi = (params = { filters, page: 1, limit: 20 }) =>
+  api.get("/products", { params });
 
 export const getSingleProductApi = (id) => api.get(`/products/${id}`);
 

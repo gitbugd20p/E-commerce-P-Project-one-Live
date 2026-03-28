@@ -5,13 +5,13 @@ import Loader from "../../components/common/Loader";
 import ProductCard from "./../../components/product/ProductCard";
 
 const Products = () => {
-  const { products, loading, fetchProducts } = useProductStore();
+  const { products, loading, fetchProducts, hasMore } = useProductStore();
 
   useEffect(() => {
     if (products.length === 0) {
-      fetchProducts();
+      fetchProducts(false);
     }
-  }, [fetchProducts, products.length]);
+  }, []);
 
   return (
     <>
@@ -20,19 +20,29 @@ const Products = () => {
 
         <ProductFilters />
 
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
+          {products.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
+        </div>
+
+        {loading && <Loader />}
+
         {!loading && products.length === 0 && (
           <div className="mt-10 text-center text-gray-500">
             No products found matching your filters.
           </div>
         )}
 
-        {loading ? (
-          <Loader />
-        ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
-            {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
+        {/* Load More Button */}
+        {hasMore && !loading && products.length > 0 && (
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => fetchProducts(true)}
+              className="rounded bg-black px-6 py-2 text-white transition-colors hover:bg-gray-800"
+            >
+              Load More
+            </button>
           </div>
         )}
       </section>

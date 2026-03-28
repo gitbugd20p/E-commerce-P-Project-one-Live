@@ -1,10 +1,12 @@
 import { create } from "zustand";
 import { getProductsApi, getSingleProductApi } from "../api/product.api";
 
-const useProductStore = create((set) => ({
+const useProductStore = create((set, get) => ({
   products: [],
   product: null,
   loading: false,
+  page: 1,
+  hasMore: true,
   filters: {
     search: "",
     category: "",
@@ -13,10 +15,15 @@ const useProductStore = create((set) => ({
     maxPrice: "",
   },
 
-  setFilter: (name, value) =>
+  setFilter: (name, value) => {
     set((state) => ({
       filters: { ...state.filters, [name]: value },
-    })),
+      page: 1,
+      products: [],
+    }));
+
+    get().fetchProducts(false);
+  },
 
   resetFilters: () => {
     set({
@@ -28,17 +35,29 @@ const useProductStore = create((set) => ({
         maxPrice: "",
       },
     });
-    const { fetchProducts } = useProductStore.getState();
-    fetchProducts();
+
+    get().fetchProducts(false);
   },
 
-  fetchProducts: async () => {
+  fetchProducts: async (isLoadMore = false) => {
     set({ loading: true });
     try {
-      const { filters } = useProductStore.getState();
-      const res = await getProductsApi(filters);
+      const { filters, page, products } = useProductStore.getState();
 
-      set({ products: res.data.data, loading: false });
+      const currentPage = isLoadMore ? page : 1;
+
+      const res = await getProductsApi({
+        ...filters,
+        page: currentPage,
+        limit: 20,
+      });
+
+      set({
+        products: isLoadMore ? [...products, ...res.data.data] : res.data.data,
+        hasMore: res.data.hasMore,
+        page: currentPage + 1,
+        loading: false,
+      });
     } catch (error) {
       set({ loading: false });
       console.log("Fetching all products error: ", error);

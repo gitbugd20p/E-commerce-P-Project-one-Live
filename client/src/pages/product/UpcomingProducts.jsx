@@ -44,7 +44,7 @@ const UpcomingProducts = () => {
             className="group relative cursor-pointer overflow-hidden bg-[#eeefff]"
           >
             {/* Image Container */}
-            <div className="aspect-[3/4] overflow-hidden">
+            <div className="aspect-3/4 overflow-hidden">
               <img
                 src={item.img}
                 alt={item.title}

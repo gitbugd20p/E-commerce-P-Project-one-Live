@@ -65,7 +65,15 @@ exports.createProduct = async (req, res) => {
 // ==========================
 exports.getAllProducts = async (req, res) => {
     try {
-        const { search, category, brand, minPrice, maxPrice } = req.query;
+        const {
+            search,
+            category,
+            brand,
+            minPrice,
+            maxPrice,
+            page = 1,
+            limit = 20,
+        } = req.query;
 
         let query = {};
 
@@ -87,11 +95,21 @@ exports.getAllProducts = async (req, res) => {
             if (maxPrice) query.price.$lte = Number(maxPrice);
         }
 
-        const products = await Product.find(query).sort({ createdAt: -1 });
+        const skip = (Number(page) - 1) * Number(limit);
+
+        const products = await Product.find(query)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(Number(limit));
+
+        // console.log(query)
+
+        const total = await Product.countDocuments(query);
 
         res.status(200).json({
             success: true,
             data: products,
+            hasMore: skip + products.length < total,
         });
     } catch (error) {
         res.status(500).json({
@@ -140,7 +158,7 @@ exports.updateProduct = async (req, res) => {
             {
                 new: true,
                 runValidators: true,
-            }
+            },
         );
 
         if (!product) {
