@@ -1,25 +1,48 @@
+import { useEffect, useState } from "react";
 import useProductStore from "../../store/useProductStore";
 
 const ProductFilters = () => {
   const { filters, setFilter, resetFilters, fetchProducts } = useProductStore();
 
+  const [localFilters, setLocalFilters] = useState(filters);
+
+  useEffect(() => {
+    setLocalFilters(filters);
+  }, [filters]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      const hasChanged = Object.keys(localFilters).some(
+        (key) => localFilters[key] !== filters[key],
+      );
+
+      if (hasChanged) {
+        setFilter(localFilters);
+      }
+    }, 600);
+
+    return () => clearTimeout(handler);
+  }, [localFilters, filters, setFilter]);
+
   const handleChange = (e) => {
-    setFilter(e.target.name, e.target.value);
+    const { name, value } = e.target;
+    setLocalFilters((prev) => ({ ...prev, [name]: value }));
   };
+
   return (
     <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-5">
       <input
         type="text"
-        name="search"
-        value={filters.search}
+        name="title"
+        value={localFilters.title}
         onChange={handleChange}
-        placeholder="Search..."
+        placeholder="Search by name..."
         className="input input-bordered"
       />
       <input
         type="text"
         name="category"
-        value={filters.category}
+        value={localFilters.category}
         onChange={handleChange}
         placeholder="Category..."
         className="input input-bordered"
@@ -27,30 +50,33 @@ const ProductFilters = () => {
       <input
         type="text"
         name="brand"
-        value={filters.brand}
+        value={localFilters.brand}
         onChange={handleChange}
         placeholder="Brand..."
         className="input input-bordered"
       />
       <input
-        type="text"
+        type="number"
         name="minPrice"
-        value={filters.minPrice}
+        value={localFilters.minPrice}
         onChange={handleChange}
         placeholder="Min Price..."
         className="input input-bordered"
       />
       <input
-        type="text"
+        type="number"
         name="maxPrice"
-        value={filters.MaxPrice}
+        value={localFilters.maxPrice}
         onChange={handleChange}
         placeholder="Max Price..."
         className="input input-bordered"
       />
 
       <div className="col-span-2 flex justify-end gap-3 md:col-span-5">
-        <button onClick={fetchProducts} className="btn btn-primary px-6">
+        <button
+          onClick={() => fetchProducts(false)}
+          className="btn btn-primary px-6"
+        >
           Apply
         </button>
         <button onClick={resetFilters} className="btn btn-outline px-6">

@@ -66,7 +66,7 @@ exports.createProduct = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
     try {
         const {
-            search,
+            title,
             category,
             brand,
             minPrice,
@@ -77,17 +77,9 @@ exports.getAllProducts = async (req, res) => {
 
         let query = {};
 
-        if (category) {
-            query.category = category;
-        }
-
-        if (brand) {
-            query.brand = brand;
-        }
-
-        if (search) {
-            query.title = { $regex: search, $options: "i" };
-        }
+        if (title) query.title = { $regex: title, $options: "i" };
+        if (category) query.category = { $regex: category, $options: "i" };
+        if (brand) query.brand = { $regex: brand, $options: "i" };
 
         if (minPrice || maxPrice) {
             query.price = {};

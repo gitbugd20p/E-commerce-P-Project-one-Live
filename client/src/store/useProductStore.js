@@ -8,16 +8,16 @@ const useProductStore = create((set, get) => ({
   page: 1,
   hasMore: true,
   filters: {
-    search: "",
+    title: "",
     category: "",
     brand: "",
     minPrice: "",
     maxPrice: "",
   },
 
-  setFilter: (name, value) => {
+  setFilter: (updatedFilters) => {
     set((state) => ({
-      filters: { ...state.filters, [name]: value },
+      filters: { ...state.filters, ...updatedFilters },
       page: 1,
       products: [],
     }));
@@ -28,7 +28,7 @@ const useProductStore = create((set, get) => ({
   resetFilters: () => {
     set({
       filters: {
-        search: "",
+        title: "",
         category: "",
         brand: "",
         minPrice: "",
@@ -40,6 +40,7 @@ const useProductStore = create((set, get) => ({
   },
 
   fetchProducts: async (isLoadMore = false) => {
+    if (get().loading) return
     set({ loading: true });
     try {
       const { filters, page, products } = useProductStore.getState();

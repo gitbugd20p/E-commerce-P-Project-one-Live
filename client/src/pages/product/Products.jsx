@@ -5,7 +5,8 @@ import Loader from "../../components/common/Loader";
 import ProductCard from "./../../components/product/ProductCard";
 
 const Products = () => {
-  const { products, loading, fetchProducts, hasMore } = useProductStore();
+  const { products, loading, fetchProducts, hasMore, resetFilters } =
+    useProductStore();
 
   useEffect(() => {
     if (products.length === 0) {
@@ -29,8 +30,13 @@ const Products = () => {
         {loading && <Loader />}
 
         {!loading && products.length === 0 && (
-          <div className="mt-10 text-center text-gray-500">
-            No products found matching your filters.
+          <div className="py-20 text-center">
+            <p className="text-lg text-gray-500">
+              No products match your current filters.
+            </p>
+            <button onClick={resetFilters} className="btn btn-outline px-6">
+              Reset
+            </button>
           </div>
         )}
 
