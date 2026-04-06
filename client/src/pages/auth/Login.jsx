@@ -34,7 +34,15 @@ const Login = () => {
               Welcome
             </h1>
             <p className="text-base-content/60 mb-6 text-center">
-              Please enter your details to sign in
+              Please enter your details to sign in <br />
+              or use <br /> email:
+              <span className="text-bold text-blue-400">
+                {" "}
+                sam9@gmail.com
+              </span>{" "}
+              <br />
+              password:{" "}
+              <span className="text-bold text-blue-400">123456789</span>
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -47,7 +55,7 @@ const Login = () => {
                 <input
                   type="email"
                   name="email"
-                  placeholder="you@example.com"
+                  placeholder="sam9@gmail.com"
                   className="input input-bordered focus:input-primary w-full transition-all"
                   onChange={handleChange}
                   required
@@ -61,7 +69,7 @@ const Login = () => {
                 <input
                   type="password"
                   name="password"
-                  placeholder="••••••••"
+                  placeholder="123456789"
                   className="input input-bordered focus:input-primary w-full transition-all"
                   onChange={handleChange}
                   required

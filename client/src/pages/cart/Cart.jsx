@@ -1,11 +1,32 @@
 import { Link } from "react-router-dom";
 import useCartStore from "../../store/useCartStore";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity, cartTotal } = useCartStore();
 
   if (cart.length === 0) {
-    return <div className="py-10 text-center">Cart is empty</div>;
+    return (
+      <div className="mx-auto max-w-4xl p-6 py-24 text-center">
+        <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <FaShoppingCart className="text-4xl text-black" />
+        </div>
+
+        <h2 className="mb-2 text-4xl font-black tracking-tighter uppercase italic">
+          Your Cart is Empty
+        </h2>
+        <p className="mb-10 font-medium text-gray-500">
+          Looks like you haven't added any heat to your cart yet.
+        </p>
+
+        <Link
+          to="/products"
+          className="btn btn-primary h-auto rounded-none px-10 py-4 text-xl font-black uppercase italic shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
+        >
+          Browse Products
+        </Link>
+      </div>
+    );
   }
 
   return (
